@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 //use these errors as appropriate, wrapping them with fmt.Errorf function
@@ -40,6 +41,10 @@ func StringSum(input string) (output string, err error) {
 	var resultStr string
 
 	if len(outputSlice) == 0 {
+		return "", fmt.Errorf("error:%w", errorEmptyInput)
+	}
+
+	if !checkOperands(result) {
 		return "", fmt.Errorf("error:%w", errorEmptyInput)
 	}
 
@@ -92,4 +97,19 @@ func StringSum(input string) (output string, err error) {
 		resultStr = strconv.Itoa(a + b)
 	}
 	return resultStr, nil
+}
+
+func checkOperands(str string) bool {
+	var count int
+	for _, r := range str {
+		if !unicode.IsDigit(r) {
+			count++
+		}
+	}
+
+	if count >= 3 {
+		return false
+	}
+
+	return true
 }
