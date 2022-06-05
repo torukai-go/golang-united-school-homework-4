@@ -107,7 +107,7 @@ func checkOperands(str string) bool {
 		}
 	}
 
-	if count >= 3 {
+	if count >= 3 || count < 1 {
 		return false
 	}
 
