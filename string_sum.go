@@ -35,44 +35,49 @@ func (e MyError) Error() string {
 
 func StringSum(input string) (output string, err error) {
 
-	if len(strings.Fields(input)) == 0 {
+	result := strings.ReplaceAll(input, " ", "")
+	var outputSlice = strings.Fields(result)
+	var resultStr string
+
+	if len(outputSlice) == 0 {
 		return "", fmt.Errorf("error:%w", errorEmptyInput)
 	}
 
-	var outputSlice = make([]string, 0, 0)
-	var resultStr string
+	result = strings.TrimPrefix(result, "+")
 
-	output = strings.TrimSpace(input)
-	output = strings.TrimPrefix(output, "+")
-
-	if !strings.Contains(output, "-") {
-		numbers := strings.Split(output, "+")
+	if !strings.Contains(result, "-") {
+		numbers := strings.Split(result, "+")
 		a, err := strconv.Atoi(numbers[0])
+
 		if err != nil {
 			return "", fmt.Errorf("error:%w", err)
 		}
+
 		b, err := strconv.Atoi(numbers[1])
+
 		if err != nil {
 			return "", fmt.Errorf("error:%w", err)
 		}
+
 		resultStr = strconv.Itoa(a + b)
 	} else {
 
 		var num1Negative bool = false
 		var num2Negative bool = false
 
-		if strings.HasPrefix(output, "-") {
-			output = strings.TrimPrefix(output, "-")
+		if strings.HasPrefix(result, "-") {
+			result = strings.TrimPrefix(result, "-")
 			num1Negative = true
 		}
 
-		if strings.Contains(output, "-") {
-			outputSlice = strings.Split(output, "-")
+		if strings.Contains(result, "-") {
+			outputSlice = strings.Split(result, "-")
 			num2Negative = true
 		} else {
-			outputSlice = strings.Split(output, "+")
+			outputSlice = strings.Split(result, "+")
 			num2Negative = false
 		}
+
 		a, _ := strconv.Atoi(string(outputSlice[0]))
 		b, _ := strconv.Atoi(string(outputSlice[1]))
 
