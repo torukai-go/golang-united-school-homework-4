@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"unicode"
 )
 
 //use these errors as appropriate, wrapping them with fmt.Errorf function
@@ -100,14 +99,14 @@ func StringSum(input string) (output string, err error) {
 }
 
 func checkOperands(str string) bool {
-	var count int
-	for _, r := range str {
-		if !unicode.IsDigit(r) {
-			count++
-		}
+
+	f := func(c rune) bool {
+		return string(c) == "+" || string(c) == "-"
 	}
 
-	if count >= 3 || count < 1 {
+	str2 := strings.FieldsFunc(str, f)
+
+	if len(str2) != 2 {
 		return false
 	}
 
