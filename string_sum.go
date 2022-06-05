@@ -45,7 +45,7 @@ func StringSum(input string) (output string, err error) {
 	}
 
 	if !checkOperands(result) {
-		return "", fmt.Errorf("error:%w", errorEmptyInput)
+		return "", fmt.Errorf("error:%w", errorNotTwoOperands)
 	}
 
 	result = strings.TrimPrefix(result, "+")
