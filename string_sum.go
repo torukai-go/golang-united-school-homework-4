@@ -2,6 +2,9 @@ package string_sum
 
 import (
 	"errors"
+	"fmt"
+	"strconv"
+	"strings"
 )
 
 //use these errors as appropriate, wrapping them with fmt.Errorf function
@@ -22,6 +25,66 @@ var (
 //
 // Use the errors defined above as described, again wrapping into fmt.Errorf
 
+type MyError struct {
+	Message string
+}
+
+func (e MyError) Error() string {
+	return e.Message
+}
+
 func StringSum(input string) (output string, err error) {
-	return "", nil
+
+	if len(strings.Fields(input)) == 0 {
+		return "", fmt.Errorf("error:%w", errorEmptyInput)
+	}
+
+	var outputSlice = make([]string, 0, 0)
+	var resultStr string
+
+	output = strings.TrimSpace(input)
+	output = strings.TrimPrefix(output, "+")
+
+	if !strings.Contains(output, "-") {
+		numbers := strings.Split(output, "+")
+		a, err := strconv.Atoi(numbers[0])
+		if err != nil {
+			return "", fmt.Errorf("error:%w", err)
+		}
+		b, err := strconv.Atoi(numbers[1])
+		if err != nil {
+			return "", fmt.Errorf("error:%w", err)
+		}
+		resultStr = strconv.Itoa(a + b)
+	} else {
+
+		var num1Negative bool = false
+		var num2Negative bool = false
+
+		if strings.HasPrefix(output, "-") {
+			output = strings.TrimPrefix(output, "-")
+			num1Negative = true
+		}
+
+		if strings.Contains(output, "-") {
+			outputSlice = strings.Split(output, "-")
+			num2Negative = true
+		} else {
+			outputSlice = strings.Split(output, "+")
+			num2Negative = false
+		}
+		a, _ := strconv.Atoi(string(outputSlice[0]))
+		b, _ := strconv.Atoi(string(outputSlice[1]))
+
+		if num1Negative {
+			a = 0 - a
+		}
+
+		if num2Negative {
+			b = 0 - b
+		}
+
+		resultStr = strconv.Itoa(a + b)
+	}
+	return resultStr, nil
 }
